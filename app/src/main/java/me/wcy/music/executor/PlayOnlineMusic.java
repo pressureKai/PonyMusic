@@ -1,16 +1,22 @@
 package me.wcy.music.executor;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 
+import me.wcy.music.R;
 import me.wcy.music.http.HttpCallback;
 import me.wcy.music.http.HttpClient;
 import me.wcy.music.model.DownloadInfo;
 import me.wcy.music.model.Music;
 import me.wcy.music.model.OnlineMusic;
 import me.wcy.music.utils.FileUtils;
+import me.wcy.music.utils.MusicUtils;
+import me.wcy.music.utils.ToastUtils;
 
 /**
  * 播放在线音乐
@@ -18,7 +24,6 @@ import me.wcy.music.utils.FileUtils;
  */
 public abstract class PlayOnlineMusic extends PlayMusic {
     private OnlineMusic mOnlineMusic;
-
     public PlayOnlineMusic(Activity activity, OnlineMusic onlineMusic) {
         super(activity, 3);
         mOnlineMusic = onlineMusic;
@@ -58,25 +63,20 @@ public abstract class PlayOnlineMusic extends PlayMusic {
         }
         music.setCoverPath(albumFile.getPath());
 
-        // 获取歌曲播放链接
-        HttpClient.getMusicDownloadInfo(mOnlineMusic.getSong_id(), new HttpCallback<DownloadInfo>() {
-            @Override
-            public void onSuccess(DownloadInfo response) {
-                if (response == null || response.getBitrate() == null) {
-                    onFail(null);
-                    return;
-                }
+        Log.e("DOWNLOAD PATH IS",mOnlineMusic.getDownload_url());
+        music.setDuration(MusicUtils.getDurationInMilliseconds(mOnlineMusic.getDownload_url()));
 
-                music.setPath(response.getBitrate().getFile_link());
-                music.setDuration(response.getBitrate().getFile_duration() * 1000);
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                music.setPath(mOnlineMusic.getDownload_url());
                 checkCounter();
             }
+        }, 3000);
 
-            @Override
-            public void onFail(Exception e) {
-                onExecuteFail(e);
-            }
-        });
+
+
+
     }
 
     private void downloadLrc(String url, String fileName) {
@@ -112,4 +112,5 @@ public abstract class PlayOnlineMusic extends PlayMusic {
             }
         });
     }
+
 }

@@ -1,6 +1,7 @@
 package me.wcy.music.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,13 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.wcy.music.R;
 import me.wcy.music.http.HttpCallback;
 import me.wcy.music.http.HttpClient;
+import me.wcy.music.model.NewOnlineMusicList;
 import me.wcy.music.model.OnlineMusic;
 import me.wcy.music.model.OnlineMusicList;
 import me.wcy.music.model.SheetInfo;
@@ -107,27 +110,78 @@ public class SheetAdapter extends BaseAdapter {
     }
 
     private void getMusicListInfo(final SheetInfo sheetInfo, final ViewHolderMusicList holderMusicList) {
+
+        List<OnlineMusic> onList = new ArrayList<>();
         if (sheetInfo.getCoverUrl() == null) {
             holderMusicList.tvMusic1.setTag(sheetInfo.getTitle());
             holderMusicList.ivCover.setImageResource(R.drawable.default_cover);
             holderMusicList.tvMusic1.setText("1.加载中…");
             holderMusicList.tvMusic2.setText("2.加载中…");
             holderMusicList.tvMusic3.setText("3.加载中…");
-            HttpClient.getSongListInfo(sheetInfo.getType(), 3, 0, new HttpCallback<OnlineMusicList>() {
+
+
+            HttpClient.getSongListInfo(sheetInfo.getType(), 3, 0, new HttpCallback<NewOnlineMusicList>() {
                 @Override
-                public void onSuccess(OnlineMusicList response) {
+                public void onSuccess(NewOnlineMusicList response) {
                     if (response == null || response.getSong_list() == null) {
                         return;
                     }
                     if (!sheetInfo.getTitle().equals(holderMusicList.tvMusic1.getTag())) {
                         return;
                     }
-                    parse(response, sheetInfo);
+                    OnlineMusicList onlineMusicList = new OnlineMusicList();
+                    onList.add(response.getSong_list().get(0));
+                    onlineMusicList.setSong_list( onList);
+                    parse(onlineMusicList, sheetInfo);
                     setData(sheetInfo, holderMusicList);
                 }
 
                 @Override
                 public void onFail(Exception e) {
+
+                }
+            });
+            HttpClient.getSongListInfo(sheetInfo.getType(), 3, 0, new HttpCallback<NewOnlineMusicList>() {
+                @Override
+                public void onSuccess(NewOnlineMusicList response) {
+                    if (response == null || response.getSong_list() == null) {
+                        return;
+                    }
+                    if (!sheetInfo.getTitle().equals(holderMusicList.tvMusic1.getTag())) {
+                        return;
+                    }
+                    OnlineMusicList onlineMusicList = new OnlineMusicList();
+                    onList.add(response.getSong_list().get(0));
+                    onlineMusicList.setSong_list(onList);
+                    parse(onlineMusicList, sheetInfo);
+                    setData(sheetInfo, holderMusicList);
+                }
+
+                @Override
+                public void onFail(Exception e) {
+
+                }
+            });
+
+            HttpClient.getSongListInfo(sheetInfo.getType(), 3, 0, new HttpCallback<NewOnlineMusicList>() {
+                @Override
+                public void onSuccess(NewOnlineMusicList response) {
+                    if (response == null || response.getSong_list() == null) {
+                        return;
+                    }
+                    if (!sheetInfo.getTitle().equals(holderMusicList.tvMusic1.getTag())) {
+                        return;
+                    }
+                    OnlineMusicList onlineMusicList = new OnlineMusicList();
+                    onList.add(response.getSong_list().get(0));
+                    onlineMusicList.setSong_list(onList);
+                    parse(onlineMusicList, sheetInfo);
+                    setData(sheetInfo, holderMusicList);
+                }
+
+                @Override
+                public void onFail(Exception e) {
+
                 }
             });
         } else {
@@ -138,7 +192,7 @@ public class SheetAdapter extends BaseAdapter {
 
     private void parse(OnlineMusicList response, SheetInfo sheetInfo) {
         List<OnlineMusic> onlineMusics = response.getSong_list();
-        sheetInfo.setCoverUrl(response.getBillboard().getPic_s260());
+        sheetInfo.setCoverUrl(response.getSong_list().get(0).getPic_big());
         if (onlineMusics.size() >= 1) {
             sheetInfo.setMusic1(mContext.getString(R.string.song_list_item_title_1,
                     onlineMusics.get(0).getTitle(), onlineMusics.get(0).getArtist_name()));

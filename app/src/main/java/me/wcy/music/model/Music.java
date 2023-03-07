@@ -1,6 +1,11 @@
 package me.wcy.music.model;
 
+import android.app.Application;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
@@ -8,7 +13,10 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Property;
 
+import java.io.File;
 import java.io.Serializable;
+
+import me.wcy.music.application.MusicApplication;
 
 /**
  * 单曲信息
@@ -188,4 +196,5 @@ public class Music implements Serializable {
     public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
     }
+
 }

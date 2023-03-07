@@ -46,23 +46,7 @@ public abstract class DownloadOnlineMusic extends DownloadMusic {
             HttpClient.downloadFile(picUrl, FileUtils.getAlbumDir(), albumFileName, null);
         }
 
-        // 获取歌曲下载链接
-        HttpClient.getMusicDownloadInfo(mOnlineMusic.getSong_id(), new HttpCallback<DownloadInfo>() {
-            @Override
-            public void onSuccess(DownloadInfo response) {
-                if (response == null || response.getBitrate() == null) {
-                    onFail(null);
-                    return;
-                }
-
-                downloadMusic(response.getBitrate().getFile_link(), artist, title, albumFile.getPath());
-                onExecuteSuccess(null);
-            }
-
-            @Override
-            public void onFail(Exception e) {
-                onExecuteFail(e);
-            }
-        });
+        downloadMusic(mOnlineMusic.getDownload_url(), artist, title, albumFile.getPath());
+        onExecuteSuccess(null);
     }
 }

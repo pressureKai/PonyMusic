@@ -10,12 +10,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import me.wcy.music.model.Music;
 import me.wcy.music.storage.preference.Preferences;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 /**
  * 歌曲工具类
@@ -110,4 +109,26 @@ public class MusicUtils {
     private static boolean isIntentAvailable(Context context, Intent intent) {
         return context.getPackageManager().resolveActivity(intent, PackageManager.GET_RESOLVED_FILTER) != null;
     }
+
+
+    public static int getDurationInMilliseconds(String url) {
+
+        try {
+            FFmpegMediaMetadataRetriever mmr = new FFmpegMediaMetadataRetriever();
+
+            mmr.setDataSource(url);
+
+            int duration = Integer.parseInt(mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION));
+
+            mmr.release();//释放资源
+
+            return duration;
+        }catch (Exception e){
+            return 60 * 1000 * 3;
+        }
+
+
+    }
+
+
 }

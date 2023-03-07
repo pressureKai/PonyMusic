@@ -39,7 +39,6 @@ public class SheetListFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         mSongLists = AppCache.get().getSheetList();
         if (mSongLists.isEmpty()) {
             String[] titles = getResources().getStringArray(R.array.online_music_list_title);

@@ -3,10 +3,14 @@ package me.wcy.music.service;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +22,7 @@ import me.wcy.music.model.Music;
 import me.wcy.music.receiver.NoisyAudioStreamReceiver;
 import me.wcy.music.storage.db.DBManager;
 import me.wcy.music.storage.preference.Preferences;
+import me.wcy.music.utils.MusicUtils;
 import me.wcy.music.utils.ToastUtils;
 
 /**
@@ -108,6 +113,9 @@ public class AudioPlayer {
         Music music = getPlayMusic();
 
         try {
+          if(music.getType() == Music.Type.ONLINE){
+
+            }
             mediaPlayer.reset();
             mediaPlayer.setDataSource(music.getPath());
             mediaPlayer.prepareAsync();

@@ -26,6 +26,7 @@ import me.wcy.music.executor.ShareOnlineMusic;
 import me.wcy.music.http.HttpCallback;
 import me.wcy.music.http.HttpClient;
 import me.wcy.music.model.Music;
+import me.wcy.music.model.NewSearchMusicModel;
 import me.wcy.music.model.SearchMusic;
 import me.wcy.music.service.AudioPlayer;
 import me.wcy.music.utils.FileUtils;
@@ -41,7 +42,7 @@ public class SearchMusicActivity extends BaseActivity implements SearchView.OnQu
     private LinearLayout llLoading;
     @Bind(R.id.ll_load_fail)
     private LinearLayout llLoadFail;
-    private List<SearchMusic.Song> searchMusicList = new ArrayList<>();
+    private List<NewSearchMusicModel.DataBean.SongsBean> searchMusicList = new ArrayList<>();
     private SearchMusicAdapter mAdapter = new SearchMusicAdapter(searchMusicList);
 
     @Override
@@ -98,16 +99,16 @@ public class SearchMusicActivity extends BaseActivity implements SearchView.OnQu
     }
 
     private void searchMusic(String keyword) {
-        HttpClient.searchMusic(keyword, new HttpCallback<SearchMusic>() {
+        HttpClient.searchMusic(keyword, new HttpCallback<NewSearchMusicModel>() {
             @Override
-            public void onSuccess(SearchMusic response) {
-                if (response == null || response.getSong() == null) {
+            public void onSuccess(NewSearchMusicModel response) {
+                if (response == null || response.getData().getSongs() == null) {
                     ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_FAIL);
                     return;
                 }
                 ViewUtils.changeViewState(lvSearchMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_SUCCESS);
                 searchMusicList.clear();
-                searchMusicList.addAll(response.getSong());
+                searchMusicList.addAll(response.getData().getSongs());
                 mAdapter.notifyDataSetChanged();
                 lvSearchMusic.requestFocus();
                 handler.post(() -> lvSearchMusic.setSelection(0));
@@ -145,19 +146,19 @@ public class SearchMusicActivity extends BaseActivity implements SearchView.OnQu
 
     @Override
     public void onMoreClick(int position) {
-        final SearchMusic.Song song = searchMusicList.get(position);
+        final NewSearchMusicModel.DataBean.SongsBean song = searchMusicList.get(position);
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle(song.getSongname());
-        String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(song.getArtistname(), song.getSongname());
+        dialog.setTitle(song.getName());
+        String path = FileUtils.getMusicDir() + FileUtils.getMp3FileName(song.getArtists().get(0).getName(), song.getName());
         File file = new File(path);
         int itemsId = file.exists() ? R.array.search_music_dialog_no_download : R.array.search_music_dialog;
         dialog.setItems(itemsId, (dialog1, which) -> {
             switch (which) {
                 case 0:// 分享
-                    share(song);
+                 //   share(song);
                     break;
                 case 1:// 下载
-                    download(song);
+                 //   download(song);
                     break;
             }
         });

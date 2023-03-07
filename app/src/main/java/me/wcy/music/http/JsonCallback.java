@@ -2,7 +2,6 @@ package me.wcy.music.http;
 
 import com.google.gson.Gson;
 import com.zhy.http.okhttp.callback.Callback;
-
 import java.io.IOException;
 
 import okhttp3.Response;
@@ -21,7 +20,7 @@ public abstract class JsonCallback<T> extends Callback<T> {
     }
 
     @Override
-    public T parseNetworkResponse(Response response, int id) throws IOException {
+    public T parseNetworkResponse(Response response, int id) throws IOException, Exception {
         try {
             String jsonString = response.body().string();
             return gson.fromJson(jsonString, clazz);

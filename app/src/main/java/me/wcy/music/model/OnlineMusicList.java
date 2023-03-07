@@ -12,7 +12,7 @@ public class OnlineMusicList {
     @SerializedName("song_list")
     private List<OnlineMusic> song_list;
     @SerializedName("billboard")
-    private Billboard billboard;
+    private Billboard billboard = new Billboard();
 
     public List<OnlineMusic> getSong_list() {
         return song_list;

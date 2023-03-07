@@ -10,6 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import me.wcy.music.R;
+import me.wcy.music.model.NewSearchMusicModel;
 import me.wcy.music.model.SearchMusic;
 import me.wcy.music.utils.binding.Bind;
 import me.wcy.music.utils.binding.ViewBinder;
@@ -19,10 +20,10 @@ import me.wcy.music.utils.binding.ViewBinder;
  * Created by hzwangchenyan on 2016/1/13.
  */
 public class SearchMusicAdapter extends BaseAdapter {
-    private List<SearchMusic.Song> mData;
+    private List<NewSearchMusicModel.DataBean.SongsBean> mData;
     private OnMoreClickListener mListener;
 
-    public SearchMusicAdapter(List<SearchMusic.Song> data) {
+    public SearchMusicAdapter(List<NewSearchMusicModel.DataBean.SongsBean> data) {
         mData = data;
     }
 
@@ -51,8 +52,8 @@ public class SearchMusicAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.tvTitle.setText(mData.get(position).getSongname());
-        holder.tvArtist.setText(mData.get(position).getArtistname());
+        holder.tvTitle.setText(mData.get(position).getName());
+        holder.tvArtist.setText(mData.get(position).getArtists().get(0).getName());
         holder.ivMore.setOnClickListener(v -> mListener.onMoreClick(position));
         holder.vDivider.setVisibility(isShowDivider(position) ? View.VISIBLE : View.GONE);
         return convertView;

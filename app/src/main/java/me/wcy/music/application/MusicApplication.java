@@ -1,6 +1,7 @@
 package me.wcy.music.application;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 
 import me.wcy.music.service.PlayService;
@@ -20,7 +21,12 @@ public class MusicApplication extends Application {
         ForegroundObserver.init(this);
         DBManager.get().init(this);
 
+        mContext = getBaseContext();
         Intent intent = new Intent(this, PlayService.class);
         startService(intent);
+    }
+    static Context mContext;
+    public static Context getContext(){
+        return mContext;
     }
 }

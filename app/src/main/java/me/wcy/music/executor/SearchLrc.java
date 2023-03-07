@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import me.wcy.music.http.HttpCallback;
 import me.wcy.music.http.HttpClient;
 import me.wcy.music.model.Lrc;
-import me.wcy.music.model.SearchMusic;
+import me.wcy.music.model.NewSearchMusicModel;
 import me.wcy.music.utils.FileUtils;
 
 /**
@@ -28,15 +28,19 @@ public abstract class SearchLrc implements IExecutor<String> {
     }
 
     private void searchLrc() {
-        HttpClient.searchMusic(title + "-" + artist, new HttpCallback<SearchMusic>() {
+        HttpClient.searchMusic(title + "-" + artist, new HttpCallback<NewSearchMusicModel>() {
             @Override
-            public void onSuccess(SearchMusic response) {
-                if (response == null || response.getSong() == null || response.getSong().isEmpty()) {
-                    onFail(null);
-                    return;
-                }
+            public void onSuccess(NewSearchMusicModel response) {
+                try {
+                    if (response == null) {
+                        onFail(null);
+                        return;
+                    }
 
-                downloadLrc(response.getSong().get(0).getSongid());
+                    downloadLrc(response.getData().getSongs().get(0).getId()+"");
+                }catch (Exception e){
+
+                }
             }
 
             @Override

@@ -18,6 +18,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import me.wcy.music.executor.ShareOnlineMusic;
 import me.wcy.music.http.HttpCallback;
 import me.wcy.music.http.HttpClient;
 import me.wcy.music.model.Music;
+import me.wcy.music.model.NewOnlineMusicList;
 import me.wcy.music.model.OnlineMusic;
 import me.wcy.music.model.OnlineMusicList;
 import me.wcy.music.model.SheetInfo;
@@ -60,6 +62,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     private List<OnlineMusic> mMusicList = new ArrayList<>();
     private OnlineMusicAdapter mAdapter = new OnlineMusicAdapter(mMusicList);
     private int mOffset = 0;
+    private String firstPicUrl= "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +93,14 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     }
 
     private void getMusic(final int offset) {
-        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, new HttpCallback<OnlineMusicList>() {
+        HttpCallback<NewOnlineMusicList> httpCallback = new HttpCallback<NewOnlineMusicList>() {
             @Override
-            public void onSuccess(OnlineMusicList response) {
+            public void onSuccess(NewOnlineMusicList response) {
                 lvOnlineMusic.onLoadComplete();
-                mOnlineMusicList = response;
+                OnlineMusicList onlineMusicList = new OnlineMusicList();
+                onlineMusicList.setSong_list(response.getSong_list());
+                firstPicUrl= response.getData().getPicurl();
+                mOnlineMusicList = onlineMusicList;
                 if (offset == 0 && response == null) {
                     ViewUtils.changeViewState(lvOnlineMusic, llLoading, llLoadFail, LoadStateEnum.LOAD_FAIL);
                     return;
@@ -125,7 +131,19 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
                     ToastUtils.show(R.string.load_fail);
                 }
             }
-        });
+        };
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+        HttpClient.getSongListInfo(mListInfo.getType(), MUSIC_LIST_SIZE, offset, httpCallback);
+
+
+
     }
 
     @Override
@@ -169,10 +187,12 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         TextView tvUpdateDate = vHeader.findViewById(R.id.tv_update_date);
         TextView tvComment = vHeader.findViewById(R.id.tv_comment);
         tvTitle.setText(mOnlineMusicList.getBillboard().getName());
-        tvUpdateDate.setText(getString(R.string.recent_update, mOnlineMusicList.getBillboard().getUpdate_date()));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(System.currentTimeMillis());
+        tvUpdateDate.setText(format);
         tvComment.setText(mOnlineMusicList.getBillboard().getComment());
         Glide.with(this)
-                .load(mOnlineMusicList.getBillboard().getPic_s640())
+                .load(firstPicUrl)
                 .asBitmap()
                 .placeholder(R.drawable.default_cover)
                 .error(R.drawable.default_cover)

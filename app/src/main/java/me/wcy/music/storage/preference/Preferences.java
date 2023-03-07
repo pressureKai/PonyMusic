@@ -16,6 +16,8 @@ public class Preferences {
     private static final String PLAY_MODE = "play_mode";
     private static final String SPLASH_URL = "splash_url";
     private static final String NIGHT_MODE = "night_mode";
+    public  static final String USER_NAME = "user_name";
+    public static final String USER_PIC = "user_pic";
 
     private static Context sContext;
 
@@ -115,7 +117,7 @@ public class Preferences {
         getPreferences().edit().putString(key, value).apply();
     }
 
-    private static SharedPreferences getPreferences() {
+    public static SharedPreferences getPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(sContext);
     }
 }

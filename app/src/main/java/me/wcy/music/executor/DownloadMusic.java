@@ -6,6 +6,7 @@ import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import me.wcy.music.R;
@@ -67,6 +68,7 @@ public abstract class DownloadMusic implements IExecutor<Void> {
             DownloadManager downloadManager = (DownloadManager) AppCache.get().getContext().getSystemService(Context.DOWNLOAD_SERVICE);
             long id = downloadManager.enqueue(request);
             String musicAbsPath = FileUtils.getMusicDir().concat(fileName);
+            Log.e("musicAbsPath","musicAbsPath is "+ musicAbsPath + "coverPath is "+ coverPath);
             DownloadMusicInfo downloadMusicInfo = new DownloadMusicInfo(title, musicAbsPath, coverPath);
             AppCache.get().getDownloadList().put(id, downloadMusicInfo);
         } catch (Throwable th) {

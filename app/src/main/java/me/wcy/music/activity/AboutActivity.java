@@ -33,14 +33,14 @@ public class AboutActivity extends BaseActivity {
             addPreferencesFromResource(R.xml.preference_about);
 
             mVersion = findPreference("version");
-            mShare = findPreference("share");
-            mStar = findPreference("star");
-            mWeibo = findPreference("weibo");
-            mJianshu = findPreference("jianshu");
-            mGithub = findPreference("github");
+//            mShare = findPreference("share");
+//            mStar = findPreference("star");
+//            mWeibo = findPreference("weibo");
+//            mJianshu = findPreference("jianshu");
+//            mGithub = findPreference("github");
 
             mVersion.setSummary("v " + BuildConfig.VERSION_NAME);
-            setListener();
+//            setListener();
         }
 
         private void setListener() {

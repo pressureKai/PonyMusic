@@ -66,7 +66,7 @@ greendao {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar','*.aar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportVersion}"
     implementation "com.android.support:design:${rootProject.ext.supportVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -76,4 +76,5 @@ dependencies {
     implementation 'me.wcy:lrcview:2.0.1'
     implementation 'com.hwangjr.rxbus:rxbus:2.0.0'
     implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }
