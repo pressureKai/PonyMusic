@@ -178,8 +178,9 @@ public class HttpClient {
 
     public static void getMusicDownloadInfo(String songId, @NonNull final HttpCallback<DownloadInfo> callback) {
         Class<NewDownloadInfo> clazz = NewDownloadInfo.class;
+        //dQWeJan4eZXFEhX9
         Gson gson = new Gson();
-        OkHttpUtils.get().url("https://v2.alapi.cn/api/music/url?id="+ songId +"&format=json&token=LwExDtUWhF3rH5ib")
+        OkHttpUtils.get().url("https://v2.alapi.cn/api/music/url?id="+ songId +"&format=json&token=dQWeJan4eZXFEhX9")
                 .build()
                 .execute(new JsonCallback<DownloadInfo>(DownloadInfo.class) {
                     @Override
@@ -273,7 +274,7 @@ public class HttpClient {
         OkHttpUtils.get()
                 .addHeader("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36")
                 .addHeader("appver","1.5.2")
-                .url("https://v2.alapi.cn/api/music/search?keyword="+ keyword +"&token=LwExDtUWhF3rH5ib")
+                .url("https://v2.alapi.cn/api/music/search?keyword="+ keyword +"&token=dQWeJan4eZXFEhX9")
                 .build()
                 .execute(new JsonCallback<NewSearchMusicModel>(NewSearchMusicModel.class) {
                     @Override
